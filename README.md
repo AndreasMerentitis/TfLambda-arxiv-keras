@@ -1,4 +1,4 @@
-# Serverless Machine Learning inference on AWS Lambda with TensorFlow and keras (with flask front end)
+# Serverless Machine Learning inference on AWS Lambda with TensorFlow / keras and flask front end
 
 This project classifies a given abstract in different subfields of Machine Learning (using labels from arxiv). 
 Under the hood there is a TensorFlow NLP classification model deployed to AWS Lambda using the Serverless framework.
@@ -12,7 +12,7 @@ by: Andreas Merentitis
 
 ### Prerequisites
 
-This project requires a pre-trained keras model on a certain subset of arcix. 
+The project requires a pre-trained keras model on a certain subset of arxiv. 
 For downloading the required data please check the repository arxiv_collector.
 The file train_local_data.py can be used to train the model using these data.
 
