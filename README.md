@@ -7,8 +7,8 @@ wsgi.
 
 by: Andreas Merentitis
 
-![relative path 6](/bluriness_pie.png?raw=true "bluriness_pie.png")
-![relative path 1](/model_train.png?raw=true "model_train.png")
+![relative path 6](/deploy.png?raw=true "deploy.png")
+![relative path 1](/infer.png?raw=true "infer.png")
 
 ### Prerequisites
 
