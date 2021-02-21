@@ -66,13 +66,16 @@ def main():
       logging.warning('seq_2 is %s', seq_2)
            
       prob = model.predict(seq_2)
-      prob /= prob.sum()
+      #prob /= prob.sum()
       prob = prob.sum(axis=0)
       logging.warning('prob is %s', prob)
       ii = np.argmax(prob)
       logging.warning('ii is %s', ii)
-      final_label = label2target[ii]
-      
+      if max(prob) >= 20:
+         final_label = label2target[ii]
+      else: 
+         final_label = 'not a stats abstract'
+         
       logging.warning('final_label is %s', final_label)
 
       results = {'text' : resultText, 'label' : final_label}
