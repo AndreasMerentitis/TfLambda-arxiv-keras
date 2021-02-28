@@ -13,7 +13,14 @@ by: Andreas Merentitis
 ### Prerequisites
 
 The project requires a pre-trained keras model on a certain subset of arxiv. 
-For downloading the required data please check the repository arxiv_collector.
+For downloading the required data please check the repository arxiv_collector
+or use the scripts provided in the data folder. For example from the root 
+directory:
+
+```
+python data/collect.py -c stat 2015ml.h5 -start 2015-01-01 -end 2015-12-31
+```
+
 The file train_local_data.py can be used to train the model using these data.
 
 
