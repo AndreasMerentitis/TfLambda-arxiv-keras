@@ -64,6 +64,7 @@ def main():
       seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
       
       logging.warning('seq_2 is %s', seq_2)
+      logging.warning('text length is %s', len(request.form['myTextArea']))
            
       prob = model.predict(seq_2)
       #prob /= prob.sum()
