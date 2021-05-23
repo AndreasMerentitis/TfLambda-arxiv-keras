@@ -107,6 +107,7 @@ sudo serverless remove --stage dev
 * https://github.com/alexdebrie/serverless-flask
 * https://www.fernandomc.com/posts/developing-flask-based-serverless-framework-apis/
 * https://pypi.org/project/serverless-wsgi/
+* https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_curve.html
 
 
 
