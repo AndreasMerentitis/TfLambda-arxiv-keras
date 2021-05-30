@@ -11,6 +11,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import model_from_json, model_from_config, load_model
 from tensorflow.keras.utils import to_categorical
 
+from sklearn.metrics import precision_recall_curve
+
 
 import pdb
 
@@ -153,11 +155,20 @@ print(ev)
 
 
 #%%
-text = ["we present high dispersion spectroscopic data of the compact planetary nebula vy 1 2 where high expansion velocities up to 100 km s are found in the ha n ii and o iii emission lines hst images reveal a bipolar structure vy 1 2 displays a bright ring like structure with a size of 2 4 2 and two faint bipolar lobes in the west east direction a faint pair of knots is also found located almost on opposite sides of the nebula at pa degrees furthermore deep low dispersion spectra are also presented and several emission lines are detected for the first time in this nebula such as the doublet cl iii a k iv a c ii 6461 a the doublet c iv 5801 5812 a by comparison with the solar abundances we find enhanced n depleted c and solar o the central star must have experienced the hot bottom burning cn cycle during the 2nd dredge up phase implying a progenitor star of higher than 3 solar masses the ver"]
+text1 = ["we present high dispersion spectroscopic data of the compact planetary nebula vy 1 2 where high expansion velocities up to 100 km s are found in the ha n ii and o iii emission lines hst images reveal a bipolar structure vy 1 2 displays a bright ring like structure with a size of 2 4 2 and two faint bipolar lobes in the west east direction a faint pair of knots is also found located almost on opposite sides of the nebula at pa degrees furthermore deep low dispersion spectra are also presented and several emission lines are detected for the first time in this nebula such as the doublet cl iii a k iv a c ii 6461 a the doublet c iv 5801 5812 a by comparison with the solar abundances we find enhanced n depleted c and solar o the central star must have experienced the hot bottom burning cn cycle during the 2nd dredge up phase implying a progenitor star of higher than 3 solar masses the ver"]
 
+text2 = ["sdfsfd ssdfs"]
+
+text3 = ["sasdas asdas asdasdasd rsgsg adasda asdffd sdfsdfs"]
+
+text4 = ["A sizable amount of goodness-of-fit tests involving functional data have appeared in the last decade. We provide a relatively compact revision of most of these contributions, within the independent and identically distributed framework, by reviewing goodness-of-fit tests for distribution and regression models with functional predictor and either scalar or functional response."]
+
+texts = [text1, text2, text3, text4]
+
+## Predict for one example to show that the flow works with the model in memory 
 
 #%%
-seq_1 = tokenizer.texts_to_sequences(text)
+seq_1 = tokenizer.texts_to_sequences(text1)
 
 
 #%%
@@ -183,9 +194,7 @@ model.save('new_model_ML.h5')
 
 print("Saved model to disk")
 
-
-# load tokenizer from pickle, model from HDF5 and predict
-
+# load tokenizer from pickle, model from HDF5 and predict for all examples
 
 with open('tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
@@ -193,25 +202,36 @@ with open('tokenizer.pickle', 'rb') as handle:
 
 load_model('new_model_ML.h5')
 
-#%%
-seq_1 = tokenizer.texts_to_sequences(text)
+category_labels = []
+for text in texts:
 
+    #%%
+    seq_1 = tokenizer.texts_to_sequences(text)
 
-#%%
-seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
+    #%%
+    seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
 
+    #%%
+    prob = model.predict(seq_2)
+    prob /= prob.sum()
+    prob = prob.sum(axis=0)
 
+    print(prob)
+    ii = np.argmax(prob)
+    print(label2target[ii])
 
-#%%
-prob = model.predict(seq_2)
-prob /= prob.sum()
-print(prob)
-ii = np.argmax(prob)
-print(label2target[ii])
+    if max(prob) >= 0.2 and len(text[0]) > 40:
+         category_label = 1
+         category_labels.append(max(prob))
+    else:
+         category_label = 0
+         category_labels.append(max(prob))
 
-#pdb.set_trace()
+pdb.set_trace()
 
-
+y_true = np.asarray([0, 0, 0, 1])
+y_predict = np.asarray(category_labels)
+precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
 
 
 
