@@ -12,6 +12,7 @@ from tensorflow.keras.models import model_from_json, model_from_config, load_mod
 from tensorflow.keras.utils import to_categorical
 from sklearn.calibration import calibration_curve
 from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
 
 
 import pdb
@@ -227,13 +228,16 @@ for text in texts:
          category_label = 0
          category_labels.append(max(prob))
 
-pdb.set_trace()
+
 
 y_true = np.asarray([0, 0, 0, 1])
 y_predict = np.asarray(category_labels)
 precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
 
+pdb.set_trace()
 
+pr_display = PrecisionRecallDisplay(precision=precision, recall=recall).plot()
+plt.show()
 
 
 
