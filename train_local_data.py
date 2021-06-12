@@ -169,8 +169,10 @@ text5 = ["A sizable amount of goodness-of-fit tests involving functional data ha
 
 text6 = ['Multiple imputation is increasingly used in dealing with missing data. While some conventional multiple imputation approaches are well studied and have shown empirical validity, they entail limitations in processing large datasets with complex data structures. Their imputation performances usually rely on expert knowledge of the inherent relations among variables. In addition, these standard approaches tend to be computationally inefficient for medium and large datasets. In this paper, we propose a scalable multiple imputation framework mixgb, which is based on XGBoost, bootstrapping and predictive mean matching. XGBoost, one of the fastest implementations of gradient boosted trees, is able to automatically retain interactions and non-linear relations in a dataset while achieving high computational efficiency. With the aid of bootstrapping and predictive mean matching, we show that our approach obtains less biased estimates and reflects appropriate imputation variability. The proposed framework is implemented in an R package misle. Supplementary materials for this article are available online.']
 
+text7 = ["Hello world"]
 
-texts = [text1, text2, text3, text4, text5, text6]
+
+texts = [text1, text2, text3, text4, text5, text6, text7]
 
 ## Predict for one example to show that the flow works with the model in memory 
 
@@ -236,7 +238,7 @@ for text in texts:
 
 
 
-y_true = np.asarray([0, 0, 0, 0, 1, 1])
+y_true = np.asarray([0, 0, 0, 0, 1, 1, 0])
 y_predict = np.asarray(category_labels)
 precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
 
