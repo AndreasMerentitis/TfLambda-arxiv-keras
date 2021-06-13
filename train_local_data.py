@@ -171,8 +171,10 @@ text6 = ['Multiple imputation is increasingly used in dealing with missing data.
 
 text7 = ["Hello world"]
 
+text8 = ["Some random text"]
+#%%
 
-texts = [text1, text2, text3, text4, text5, text6, text7]
+texts = [text1, text2, text3, text4, text5, text6, text7, text8]
 
 ## Predict for one example to show that the flow works with the model in memory 
 
@@ -238,7 +240,7 @@ for text in texts:
 
 
 
-y_true = np.asarray([0, 0, 0, 0, 1, 1, 0])
+y_true = np.asarray([0, 0, 0, 0, 1, 1, 0, 0])
 y_predict = np.asarray(category_labels)
 precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
 
