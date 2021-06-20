@@ -18,6 +18,83 @@ import matplotlib.pyplot as plt
 
 import pdb
 
+def get_abstracts(files):
+    abstracts = []
+    labels = []
+    for f in files:
+       store = pandas.HDFStore(f)
+       df = store['/df']
+       store.close()
+
+       abstracts += list(df['abstract'])
+       labels = np.hstack([labels,np.array(df['categories'])])
+
+    labels = np.asarray([item[0] for item in labels.tolist()])
+    selected_labels = ['stat.AP', 'stat.CO', 'stat.ME', 'stat.ML', 'stat.OT']
+    labels_selected = np.asarray([item for item in labels.tolist() if item in selected_labels])
+
+    jj = 0 
+    abstracts_selected = []
+
+    for item in labels.tolist(): 
+       if item in selected_labels:
+           abstracts_selected.append(abstracts[jj])
+           jj = jj + 1
+        
+    abstracts_selected = np.asarray(abstracts_selected)
+    return labels_selected, abstracts_selected
+
+
+def define_model(abstracts_selected, labels_selected):
+    num_words = 10000
+    tokenizer = Tokenizer(num_words=num_words)
+    tokenizer.fit_on_texts(abstracts_selected)
+    sequences = tokenizer.texts_to_sequences(abstracts_selected)
+    seq = pad_sequences(sequences, padding='post', value=0, maxlen=100)
+
+
+    # Tokenizers come with a convenient list of words and IDs
+    dictionary = tokenizer.word_index
+    # Let's save this out so we can use it later
+    with open('dictionary_ML.json', 'w') as dictionary_file:
+       json.dump(dictionary, dictionary_file)
+
+
+    # saving
+    with open('tokenizer.pickle', 'wb') as handle:
+       pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    # loading
+
+    np.random.seed(1234)
+    ind = np.random.randint(0, len(labels_selected), len(labels_selected))
+    print(ind.shape)
+    labels_selected = labels_selected[ind]
+    seq = seq[ind,:]
+
+    split_1 = int(0.8 * len(labels_selected))
+    split_2 = int(0.9 * len(labels_selected))
+    train_labels = labels_selected[:split_1]
+    dev_labels = labels_selected[split_1:split_2]
+    test_labels = labels_selected[split_2:]
+
+    train_seq = seq[:split_1, :]
+    dev_seq = seq[split_1:split_2, :]
+    test_seq = seq[split_2:, :]
+
+    #%%
+    vocab_size = 10000
+
+    #%%
+    model = keras.Sequential()
+    model.add(keras.layers.Embedding(vocab_size, 64))
+    model.add(keras.layers.GlobalAveragePooling1D())
+    model.add(keras.layers.Dense(64, activation=tf.nn.relu))
+    model.add(keras.layers.Dense(5, activation=tf.nn.sigmoid))
+    model.summary()
+
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
+    return model, train_labels, dev_labels, test_labels, train_seq, dev_seq, test_seq, tokenizer
+
 
 target_name_dict = {'stat.AP' : 0,
                     'stat.CO' : 1,
@@ -36,111 +113,25 @@ files = ["data/2015ml.h5",
         ]
 
 
-abstracts = []
-labels = []
-for f in files:
 
-    store = pandas.HDFStore(f)
-    df = store['/df']
-    store.close()
+labels_selected, abstracts_selected = get_abstracts(files)
 
-    abstracts += list(df['abstract'])
-    labels = np.hstack([labels,np.array(df['categories'])])
-
-
-labels = np.asarray([item[0] for item in labels.tolist()])
-
-
-selected_labels = ['stat.AP', 'stat.CO', 'stat.ME', 'stat.ML', 'stat.OT']
-
-
-labels_selected = np.asarray([item for item in labels.tolist() if item in selected_labels])
-
-
-jj = 0 
-abstracts_selected = []
-
-
-
-for item in labels.tolist(): 
-    if item in selected_labels:
-        abstracts_selected.append(abstracts[jj])
-        jj = jj + 1
-        
-abstracts_selected = np.asarray(abstracts_selected)
 
 
 print (np.unique(labels_selected))
 print("---------")
 
 
-labels = labels_selected
-
-
+#labels = labels_selected
 
 for i in range(2):
-    print(abstracts[i])
-    print(target_name_dict[labels[i]])
+    print(abstracts_selected[i])
+    print(target_name_dict[labels_selected[i]])
     print("---------")
 
 
-num_words = 10000
-tokenizer = Tokenizer(num_words=num_words)
-tokenizer.fit_on_texts(abstracts)
-sequences = tokenizer.texts_to_sequences(abstracts)
-seq = pad_sequences(sequences, padding='post', value=0, maxlen=100)
 
-
-
-# Tokenizers come with a convenient list of words and IDs
-dictionary = tokenizer.word_index
-# Let's save this out so we can use it later
-with open('dictionary_ML.json', 'w') as dictionary_file:
-    json.dump(dictionary, dictionary_file)
-
-
-# saving
-with open('tokenizer.pickle', 'wb') as handle:
-    pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-# loading
-
-
-
-np.random.seed(1234)
-ind = np.random.randint(0, len(labels), len(labels))
-print(ind.shape)
-labels = labels[ind]
-seq = seq[ind,:]
-
-
-
-
-split_1 = int(0.8 * len(labels))
-split_2 = int(0.9 * len(labels))
-train_labels = labels[:split_1]
-dev_labels = labels[split_1:split_2]
-test_labels = labels[split_2:]
-
-train_seq = seq[:split_1, :]
-dev_seq = seq[split_1:split_2, :]
-test_seq = seq[split_2:, :]
-
-
-#%%
-vocab_size = 10000
-
-
-#%%
-model = keras.Sequential()
-model.add(keras.layers.Embedding(vocab_size, 64))
-model.add(keras.layers.GlobalAveragePooling1D())
-model.add(keras.layers.Dense(64, activation=tf.nn.relu))
-model.add(keras.layers.Dense(5, activation=tf.nn.sigmoid))
-model.summary()
-
-
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
-
+model, train_labels, dev_labels, test_labels, train_seq, dev_seq, test_seq, tokenizer = define_model(abstracts_selected, labels_selected)
 
 y_train_num = np.asarray([target_name_dict[x] for x in train_labels.tolist()])
 y_test_num = np.asarray([target_name_dict[x] for x in test_labels.tolist()])
