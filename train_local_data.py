@@ -96,6 +96,22 @@ def define_model(abstracts_selected, labels_selected):
     return model, train_labels, dev_labels, test_labels, train_seq, dev_seq, test_seq, tokenizer
 
 
+def predict_text(text1):
+    #%%
+    seq_1 = tokenizer.texts_to_sequences(text1)
+
+    #%%
+    seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
+
+    #%%
+    prob = model.predict(seq_2)
+    prob /= prob.sum()
+    print(prob)
+    ii = np.argmax(prob)
+    print(label2target[ii])
+    return prob, label2target
+     
+
 target_name_dict = {'stat.AP' : 0,
                     'stat.CO' : 1,
                     'stat.ME' : 2,
@@ -112,17 +128,11 @@ files = ["data/2015ml.h5",
          "data/2019ml.h5",
         ]
 
-
-
 labels_selected, abstracts_selected = get_abstracts(files)
-
-
 
 print (np.unique(labels_selected))
 print("---------")
 
-
-#labels = labels_selected
 
 for i in range(2):
     print(abstracts_selected[i])
@@ -168,22 +178,7 @@ text8 = ["Some random text"]
 texts = [text1, text2, text3, text4, text5, text6, text7, text8]
 
 ## Predict for one example to show that the flow works with the model in memory 
-
-#%%
-seq_1 = tokenizer.texts_to_sequences(text1)
-
-
-#%%
-seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
-
-
-#%%
-prob = model.predict(seq_2)
-prob /= prob.sum()
-print(prob)
-ii = np.argmax(prob)
-print(label2target[ii])
-
+prob, label2target = predict_text(text1)
 
 
 # serialize model to JSON
@@ -206,21 +201,8 @@ load_model('new_model_ML.h5')
 
 category_labels = []
 for text in texts:
-
-    #%%
-    seq_1 = tokenizer.texts_to_sequences(text)
-
-    #%%
-    seq_2 = pad_sequences(seq_1, padding='post', value=0, maxlen=350)
-
-    #%%
-    prob = model.predict(seq_2)
-    prob /= prob.sum()
-    prob = prob.sum(axis=0)
-
-    print(prob)
-    ii = np.argmax(prob)
-    print(label2target[ii])
+    prob, label2target = predict_text(text)
+    prob = prob.sum(axis=0) 
 
     if max(prob) >= 0.2 and len(text[0]) > 40:
          category_label = 1
@@ -228,7 +210,6 @@ for text in texts:
     else:
          category_label = 0
          category_labels.append(max(prob))
-
 
 
 y_true = np.asarray([0, 0, 0, 0, 1, 1, 0, 0])
