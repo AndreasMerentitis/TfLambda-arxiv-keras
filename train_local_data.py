@@ -1,6 +1,6 @@
 import numpy as np 
 import tensorflow as tf
-import pandas
+import pandas as pd
 import sys
 import json
 import pickle
@@ -15,14 +15,13 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import PrecisionRecallDisplay
 import matplotlib.pyplot as plt 
 
-
 import pdb
 
 def get_abstracts(files):
     abstracts = []
     labels = []
     for f in files:
-       store = pandas.HDFStore(f)
+       store = pd.HDFStore(f)
        df = store['/df']
        store.close()
 
@@ -156,30 +155,17 @@ history = model.fit(train_seq, train_labels_onehot, epochs=10, steps_per_epoch=3
 ev  = model.evaluate(test_seq, test_labels_onehot, steps=10)
 print(ev)
 
+df = pd.read_csv('texts.csv')  
 
-#%%
-text1 = ["we present high dispersion spectroscopic data of the compact planetary nebula vy 1 2 where high expansion velocities up to 100 km s are found in the ha n ii and o iii emission lines hst images reveal a bipolar structure vy 1 2 displays a bright ring like structure with a size of 2 4 2 and two faint bipolar lobes in the west east direction a faint pair of knots is also found located almost on opposite sides of the nebula at pa degrees furthermore deep low dispersion spectra are also presented and several emission lines are detected for the first time in this nebula such as the doublet cl iii a k iv a c ii 6461 a the doublet c iv 5801 5812 a by comparison with the solar abundances we find enhanced n depleted c and solar o the central star must have experienced the hot bottom burning cn cycle during the 2nd dredge up phase implying a progenitor star of higher than 3 solar masses the ver"]
+texts = df.texts
+y_true = df.labels
 
-text2 = ["sdfsfd ssdfs"]
 
-text3 = ["sasdas asdas asdasdasd rsgsg adasda asdffd sdfsdfs"]
-
-text4 = ["This is not a true arxiv abstract"]
-
-text5 = ["A sizable amount of goodness-of-fit tests involving functional data have appeared in the last decade. We provide a relatively compact revision of most of these contributions, within the independent and identically distributed framework, by reviewing goodness-of-fit tests for distribution and regression models with functional predictor and either scalar or functional response."]
-
-text6 = ['Multiple imputation is increasingly used in dealing with missing data. While some conventional multiple imputation approaches are well studied and have shown empirical validity, they entail limitations in processing large datasets with complex data structures. Their imputation performances usually rely on expert knowledge of the inherent relations among variables. In addition, these standard approaches tend to be computationally inefficient for medium and large datasets. In this paper, we propose a scalable multiple imputation framework mixgb, which is based on XGBoost, bootstrapping and predictive mean matching. XGBoost, one of the fastest implementations of gradient boosted trees, is able to automatically retain interactions and non-linear relations in a dataset while achieving high computational efficiency. With the aid of bootstrapping and predictive mean matching, we show that our approach obtains less biased estimates and reflects appropriate imputation variability. The proposed framework is implemented in an R package misle. Supplementary materials for this article are available online.']
-
-text7 = ["Hello world"]
-
-text8 = ["Some random text"]
-#%%
-
-texts = [text1, text2, text3, text4, text5, text6, text7, text8]
 
 ## Predict for one example to show that the flow works with the model in memory 
-prob, label2target = predict_text(text1)
+prob, label2target = predict_text([texts[0]])
 
+#%%
 
 # serialize model to JSON
 model_json = model.to_json()
@@ -201,7 +187,7 @@ load_model('new_model_ML.h5')
 
 category_labels = []
 for text in texts:
-    prob, label2target = predict_text(text)
+    prob, label2target = predict_text([text])
     prob = prob.sum(axis=0) 
 
     if max(prob) >= 0.2 and len(text[0]) > 40:
@@ -212,11 +198,10 @@ for text in texts:
          category_labels.append(max(prob))
 
 
-y_true = np.asarray([0, 0, 0, 0, 1, 1, 0, 0])
 y_predict = np.asarray(category_labels)
 precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
 
-pdb.set_trace()
+#pdb.set_trace()
 
 pr_display = PrecisionRecallDisplay(precision=precision, recall=recall).plot()
 plt.show()
