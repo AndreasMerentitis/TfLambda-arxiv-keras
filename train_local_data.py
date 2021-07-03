@@ -12,7 +12,9 @@ from tensorflow.keras.models import model_from_json, model_from_config, load_mod
 from tensorflow.keras.utils import to_categorical
 from sklearn.calibration import calibration_curve
 from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import roc_curve
 from sklearn.metrics import PrecisionRecallDisplay
+from sklearn.metrics import RocCurveDisplay
 import matplotlib.pyplot as plt 
 
 import pdb
@@ -199,11 +201,15 @@ for text in texts:
 
 
 y_predict = np.asarray(category_labels)
-precision, recall, thresholds = precision_recall_curve(y_true, y_predict)
+precision, recall, thresholds_prr = precision_recall_curve(y_true, y_predict)
+fpr, tpr, thresholds_roc = roc_curve(y_true, y_predict)
 
 #pdb.set_trace()
 
 pr_display = PrecisionRecallDisplay(precision=precision, recall=recall).plot()
+plt.show()
+
+roc_display = RocCurveDisplay(fpr=fpr, tpr=tpr).plot()
 plt.show()
 
 
