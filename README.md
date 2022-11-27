@@ -27,6 +27,10 @@ The file train_local_data.py can be used to train the model using these data.
 #### Setup serverless
 
 ```  
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+
+sudo apt-get install -y nodejs
+
 sudo npm install -g serverless
 
 sudo serverless plugin install -n serverless-python-requirements
@@ -38,7 +42,7 @@ pip install -r requirements.txt
 ```
 #### Setup AWS credentials
 
-Make sure you have the AWS access key and secrete keys setup locally, following this video [here](https://www.youtube.com/watch?v=KngM5bfpttA)
+Make sure you have the AWS access key and secret keys setup locally, following this video [here](https://www.youtube.com/watch?v=KngM5bfpttA)
 
 ### Download the code locally
 
