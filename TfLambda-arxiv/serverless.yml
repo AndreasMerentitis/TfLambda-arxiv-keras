@@ -9,9 +9,9 @@ provider:
   region: us-east-1
   runtime: python3.6
   stage: dev
-  #credentials:
-  #  accessKeyId: 
-  #  secretAccessKey: 
+  credentials:
+    accessKeyId: 
+    secretAccessKey: 
 
   iamRoleStatements:
     - Effect: Allow
@@ -68,7 +68,7 @@ functions:
 #      - arn:aws:lambda:us-east-1:446751924810:layer:python-3-6-scikit-learn-0-22-0:4
     events:
       - http: ANY /
-      - http: 'ANY /{proxy+}'
+      - http: 'ANY {proxy+}'
 
 
 custom:
