@@ -78,7 +78,7 @@ python local_train_new_model.py
 
 
 ```
-cd tf-lambda
+cd TfLambda-arxiv
 
 npm install
 
