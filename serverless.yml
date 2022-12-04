@@ -9,6 +9,7 @@ provider:
   region: us-east-1
   runtime: python3.6
   stage: dev
+  profile: serverless
   #credentials:
   #  accessKeyId: 
   #  secretAccessKey: 
