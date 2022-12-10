@@ -80,7 +80,7 @@ python local_train_new_model.py
 ```
 cd TfLambda-arxiv
 
- npm install --dev serverless-better-credentials
+npm install
 
 sudo serverless deploy --stage dev
 

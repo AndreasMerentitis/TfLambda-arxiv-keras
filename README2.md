@@ -80,8 +80,6 @@ python local_train_new_model.py
 ```
 cd TfLambda-arxiv
 
-sudo serverless deploy --stage dev
-
 sudo npx sls deploy --stage dev --aws-profile serverless2
 
 aws s3 cp model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
