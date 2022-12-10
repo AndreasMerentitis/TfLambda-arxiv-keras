@@ -1,15 +1,14 @@
-service: tflambda-arxiv
+service: TfLambda-arxiv
 
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
-  
 provider:
   name: aws
   region: us-east-1
   runtime: python3.6
   stage: dev
-  profile: default
+  #profile: default
   #credentials:
   #  accessKeyId: 
   #  secretAccessKey: 

@@ -31,11 +31,11 @@ curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
 sudo apt-get install -y nodejs
 
-sudo npm install -g serverless
+sudo npm install -g serverless@2
 
-sudo serverless plugin install -n serverless-python-requirements
+sudo npx serverless plugin install -n serverless-python-requirements
 
-sudo serverless plugin install -n serverless-wsgi
+sudo npx serverless plugin install -n serverless-wsgi
 
 pip install -r requirements.txt
 
@@ -80,9 +80,9 @@ python local_train_new_model.py
 ```
 cd TfLambda-arxiv
 
- npm install --dev serverless-better-credentials
-
 sudo serverless deploy --stage dev
+
+sudo npx sls deploy --stage dev --aws-profile serverless2
 
 aws s3 cp model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
