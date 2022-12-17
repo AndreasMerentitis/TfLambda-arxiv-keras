@@ -8,6 +8,7 @@ provider:
   region: us-east-1
   runtime: python3.6
   stage: dev
+  lambdaHashingVersion: 20201221
   #profile: default
   #credentials:
   #  accessKeyId: 

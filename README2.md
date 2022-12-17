@@ -80,7 +80,7 @@ python local_train_new_model.py
 ```
 cd TfLambda-arxiv
 
-sudo npx sls deploy --stage dev --aws-profile serverless2
+npx sls deploy --stage dev --aws-profile serverless2
 
 aws s3 cp model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
@@ -111,6 +111,7 @@ sudo serverless remove --stage dev
 * https://pypi.org/project/serverless-wsgi/
 * https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_curve.html
 * https://scikit-learn.org/stable/modules/generated/sklearn.calibration.calibration_curve.html#sklearn.calibration.calibration_curve
+* https://hevodata.com/learn/serverless-python/
 
 
 
