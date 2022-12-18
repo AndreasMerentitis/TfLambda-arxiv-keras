@@ -80,11 +80,11 @@ python local_train_new_model.py
 ```
 cd TfLambda-arxiv
 
-npx sls deploy --stage dev --aws-profile serverless2
+npx sls deploy --stage dev --aws-profile serverless
 
-aws s3 cp model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+aws s3 cp ../model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
-aws s3 cp tokenizer.pickle s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+aws s3 cp ../tokenizer.pickle s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
 curl -X GET https://syrqz8iwfd.execute-api.eu-west-1.amazonaws.com/dev
 
@@ -98,7 +98,7 @@ curl -X GET https://syrqz8iwfd.execute-api.eu-west-1.amazonaws.com/dev/{proxy+}
 ```
 aws s3 rm s3://serverless-ml-1 --recursive
 
-sudo serverless remove --stage dev 
+serverless remove --stage dev 
 ```
 
 # Using data and extending the basic idea from these sources:
