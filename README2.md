@@ -31,13 +31,17 @@ curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
 sudo apt-get install -y nodejs
 
-sudo npm install -g serverless@2
+#sudo npm install -d -g serverless@2.35.0
+
+#sudo npm install -d -g serverless@2.72.3
 
 sudo npx serverless plugin install -n serverless-python-requirements
 
 sudo npx serverless plugin install -n serverless-wsgi
 
-pip install -r requirements.txt
+source activate py36
+
+pip install -r requirements36.txt
 
 ```
 #### Setup AWS credentials
@@ -47,7 +51,7 @@ Make sure you have the AWS access key and secret keys setup locally, following t
 ### Download the code locally
 
 ```  
-serverless create --template-url https://github.com/AndreasMerentitis/TfLambda-arxiv-keras --path TfLambda-arxiv
+npx serverless create --template-url https://github.com/AndreasMerentitis/TfLambda-arxiv-keras --path TfLambda-arxiv
 ```
 
 ### Update S3 bucket to unique name
@@ -86,6 +90,8 @@ aws s3 cp ../model_ML.h5 s3://serverless-ml-1/ --grants read=uri=http://acs.amaz
 
 aws s3 cp ../tokenizer.pickle s3://serverless-ml-1/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
+npx sls invoke -f app
+
 curl -X GET https://syrqz8iwfd.execute-api.eu-west-1.amazonaws.com/dev
 
 curl -X GET https://syrqz8iwfd.execute-api.eu-west-1.amazonaws.com/dev/{proxy+}
@@ -98,7 +104,7 @@ curl -X GET https://syrqz8iwfd.execute-api.eu-west-1.amazonaws.com/dev/{proxy+}
 ```
 aws s3 rm s3://serverless-ml-1 --recursive
 
-serverless remove --stage dev 
+npx serverless remove --stage dev 
 ```
 
 # Using data and extending the basic idea from these sources:
