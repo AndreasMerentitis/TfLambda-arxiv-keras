@@ -33,15 +33,15 @@ sudo apt-get install -y nodejs
 
 #sudo npm install -d -g serverless@2.35.0
 
-#sudo npm install -d -g serverless@2.72.3
+sudo npm install -d -g serverless@2.72.3
 
 sudo npx serverless plugin install -n serverless-python-requirements
 
 sudo npx serverless plugin install -n serverless-wsgi
 
-source activate py36
+source activate py37
 
-pip install -r requirements36.txt
+pip install -r requirements.txt
 
 ```
 #### Setup AWS credentials
@@ -83,6 +83,12 @@ python local_train_new_model.py
 
 ```
 cd TfLambda-arxiv
+
+#npm install -d serverless@2.72.3
+
+#npx serverless plugin install -n serverless-python-requirements
+
+#npx serverless plugin install -n serverless-wsgi
 
 npx sls deploy --stage dev --aws-profile serverless
 
