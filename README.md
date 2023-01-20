@@ -5,6 +5,9 @@ Under the hood there is a TensorFlow NLP classification model deployed to AWS La
 The model is trained locally with keras. The abstract is submited unsing a web form that is powered by flask and
 wsgi. 
 
+Since lambda does not support py36 anymore, this version cannot be deployed. 
+Use instead the respective sklearn based project that works with newer python version 
+
 by: Andreas Merentitis
 
 ![relative path 6](/deploy.png?raw=true "deploy.png")
